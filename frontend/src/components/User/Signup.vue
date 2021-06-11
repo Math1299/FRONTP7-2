@@ -32,26 +32,7 @@
                         required
                     ></v-text-field>
                 </v-form>
-                <template>
-                    <div class="text-center">
-                        <v-dialog v-model="dialog" persistent width="500">
-                            <template v-slot:activator="{ on, attrs }">
-                                <v-btn :disabled="!valid" class="success" v-bind="attrs" v-on="on">Confirmer</v-btn>
-                            </template>
-                            <v-card>
-                                <v-card-title class="text-center">
-                                    Votre compte a été créé ! <br />
-                                    Veuillez vous connecter pour accéder à l'intranet.
-                                </v-card-title>
-                                <v-divider></v-divider>
-                                <v-card-actions>
-                                    <v-spacer></v-spacer>
-                                    <v-btn @click="sendSignup()" class="success">Se connecter</v-btn>
-                                </v-card-actions>
-                            </v-card>
-                        </v-dialog>
-                    </div>
-                </template>
+                <v-btn :disabled="!valid" class="success mb-3" @click="sendSignup()">Valider</v-btn>
                 <p v-if="msg">{{ message }}</p>
             </v-card-text>
         </v-card>
@@ -92,7 +73,7 @@ export default {
             axios
                 .post("http://localhost:5000/api/user/signup", this.dataSignupS, { headers: { "Content-Type": "application/json" } })
                 .then((response) => {
-                    let sign = JSON.parse(response.data);
+                    let sign = JSON.stringify(response.data);
                     this.message = sign.message;
                     this.form = false;
                     this.msg = true;
@@ -108,9 +89,8 @@ export default {
 </script>
 <style lang="scss">
 .signup {
-    position: flex;
-    flex-direction: row;
-    top: 5%;
+    position: absolute;
+    top: 40%;
     width: 350px;
     height: 200px;
     text-align: center;

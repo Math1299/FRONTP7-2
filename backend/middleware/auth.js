@@ -23,6 +23,6 @@ module.exports = (req, res, next) => {
             }
         });
     } catch (error) {
-        res.status(401).json({ error: error | "Requête non identifiée" });
+        res.status(401).json({ error: error | "Erreur sur votre requête" });
     }
 };

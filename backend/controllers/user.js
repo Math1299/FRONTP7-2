@@ -47,6 +47,23 @@ exports.login = (req, res, next) => {
         });
 };
 
+//middleware pour visualiser son profil utilisateur en vue de la modifier ou de le supprimer
+exports.myProfile = (req, res, next) => {
+    const token = req.headers.authorization.split(" ")[1];
+    const decodedToken = jwt.verify(token, process.env.JWT_KEY);
+    const userId = decodedToken.userId;
+    let sqlInserts = [userId];
+    user.myProfile(sqlInserts)
+        .then((response) => {
+            res.status(200).json(JSON.stringify(response));
+            console.log(response);
+        })
+        .catch((error) => {
+            console.log(error);
+            res.status(400).json({ error });
+        });
+};
+
 //middleware pour modifier les utilisateurs existants
 exports.update = (req, res, next) => {
     const token = req.headers.authorization.split(" ")[1];
@@ -58,8 +75,8 @@ exports.update = (req, res, next) => {
     let sqlInserts = [firstName, lastName, email, userId];
     console.log(sqlInserts);
     user.update(sqlInserts)
-        .then((pb) => {
-            res.status(200).json(JSON.stringify(pb));
+        .then((response) => {
+            res.status(200).json(JSON.stringify(response));
         })
         .catch((error) => {
             console.log(error);

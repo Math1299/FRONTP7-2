@@ -46,6 +46,17 @@ class User {
         });
     }
 
+    myProfile(sqlInserts) {
+        let sqlMyProfile = "SELECT firstName, lastName, email FROM users WHERE id = ?";
+        sqlMyProfile = mysql.format(sqlMyProfile, sqlInserts);
+        return new Promise((resolve, reject) => {
+            connectDb.query(sqlMyProfile, function (err, result) {
+                if (err) return reject({ error: "Impossible d'accéder à vos données" });
+                resolve(result);
+            });
+        });
+    }
+
     update(sqlInserts) {
         let sqlUpdateUser = "UPDATE users SET firstName = ?, lastName = ?, email = ? WHERE id = ?";
         sqlUpdateUser = mysql.format(sqlUpdateUser, sqlInserts);

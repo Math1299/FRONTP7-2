@@ -14,8 +14,9 @@ const auth = require("../middleware/auth");
 try {
     router.post("/signup", passwordValidator, emailValidator, userCtrl.signup); //localhost:5000/api/user/signup
     router.post("/login", userCtrl.login); //localhost:5000/api/user/login
-    router.put("/:id/update", auth, userCtrl.update); //localhost:5000/api/user/92/update          92= id table users
-    router.delete("/:id/delete", auth, userCtrl.delete); //localhost:5000/api/user/22/delete       22 = id table users
+    router.get("/", auth, userCtrl.myProfile); //localhost:5000/api/user/
+    router.put("/", auth, userCtrl.update); //localhost:5000/api/user/92/update          92= id table users
+    router.delete("/", auth, userCtrl.delete); //localhost:5000/api/user/22/delete       22 = id table users
 } catch (error) {
     console.log(error);
 }

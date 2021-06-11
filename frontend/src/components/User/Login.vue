@@ -6,9 +6,9 @@
                     <v-text-field
                         v-model="dataLogin.email"
                         :rules="emailRules"
-                        label="e-mail"
+                        label="Email"
                         prepend-icon="mdi-at"
-                        color="black"
+                        color="blue"
                         required
                         autofocus
                     ></v-text-field>
@@ -18,7 +18,7 @@
                         type="password"
                         label="Mot de passe"
                         prepend-icon="mdi-lock-outline"
-                        color="black"
+                        color="blue"
                         required
                     ></v-text-field>
                 </v-form>
@@ -29,6 +29,7 @@
         </v-card>
     </v-app>
 </template>
+
 <script>
 import axios from "axios";
 
@@ -37,8 +38,8 @@ export default {
     data() {
         return {
             valid: true,
-            emailRules: [(v) => !!v || "Renseignez votre e-mail", (v) => /.+@.+\..+/.test(v) || "Votre e-mail n'est pas valide"],
-            passRules: [(v) => !!v || "Renseignez votre mot de passe"],
+            emailRules: [(v) => !!v || "Saisir votre Email", (v) => /.+@.+\..+/.test(v) || "Email invalide"],
+            passRules: [(v) => !!v || "Saisir votre mot de passe"],
             dataLogin: {
                 email: "",
                 password: "",
@@ -62,7 +63,7 @@ export default {
                 })
                 .catch((error) => {
                     console.log(error);
-                    this.message = error;
+                    this.message = `Veuillez vérifier vos données`;
                     this.msg = true;
                 });
         },
@@ -71,9 +72,8 @@ export default {
 </script>
 <style lang="scss">
 .login {
-    position: flex;
-    flex-direction: row;
-    top: 5%;
+    position: absolute;
+    top: 40%;
     width: 350px;
     height: 200px;
     text-align: center;

@@ -1,22 +1,39 @@
 <template>
-    <v-app id="accueil">
-        <top-header />
-        <router-view></router-view>
-        <div class="logo"></div>
+    <v-app id="user">
+        <v-container class="user d-flex flex-column justify-content-center align-items-center">
+            <div class="button d-flex justify-content-around">
+                <v-btn type="button" class="btn btn-dark" @click="component = 'signup'">S'inscrire</v-btn>
+                <v-btn type="button" class="btn btn-dark" @click="component = 'login'">Se connecter</v-btn>
+            </div>
+            <div class="logo"></div>
+            <component v-bind:is="component"></component>
+        </v-container>
     </v-app>
 </template>
+
 <script>
-import TopHeader from "./Accueil/TopHeader";
+import Signup from "./User/Signup.vue";
+import Login from "./User/Login.vue";
 
 export default {
-    name: "Accueil",
+    name: "User",
+    data() {
+        return {
+            component: "",
+        };
+    },
+
     components: {
-        "top-header": TopHeader,
+        login: Login,
+        signup: Signup,
     },
 };
 </script>
+
 <style lang="scss">
-#accueil {
+#user {
+    width: 100%;
+    height: 100vh;
     background-image: linear-gradient(
             112.5deg,
             rgb(214, 214, 214) 0%,
@@ -72,5 +89,24 @@ export default {
     background-blend-mode: overlay, overlay, overlay, normal;
     display: flex;
     flex-direction: row;
+}
+.user {
+    width: 100%;
+    height: 80vh;
+}
+.button {
+    width: 100%;
+    height: 5vh;
+}
+.logo {
+    width: 70%;
+    height: 40%;
+    background-image: url("../assets/icon-left-font-monochrome-black.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: absolute;
+    right: 15%;
+    top: 40%;
 }
 </style>
