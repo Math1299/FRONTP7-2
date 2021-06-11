@@ -2,11 +2,11 @@
     <v-app id="forum" class="forum">
         <top-header />
         <div class="ml-12">
-            <h1 class="ma-4">Forum</h1>
+            <h1 class="ma-4">Bienvenue sur réseau social d'entreprise</h1>
 
             <router-view></router-view>
             <v-container>
-                <v-btn class="ma-3" color="black white--text" @click="afficheForm">Créer un post</v-btn>
+                <v-btn class="ma-3" outlined color="blue-grey" elevation="2" @click="afficheForm">Créer un post</v-btn>
 
                 <v-card class="forum__post ma-3 mt-6" v-for="(post, index) in allPosts" v-bind:key="index">
                     <div class="d-flex justify-space-between">
@@ -16,15 +16,15 @@
                         <v-card-actions class=" forum__post__manage" v-if="post.userId == userId">
                             <v-btn
                                 class="forum__post__manage--btn"
-                                color="black"
+                                color="blue-grey"
                                 title="modifier le post"
                                 @click.stop="goDialogUpPost(post.title, post.content, post.id)"
                                 icon
                             >
-                                <v-icon>mdi-pencil</v-icon>
+                                <v-icon>mdi-fountain-pen-tip</v-icon>
                             </v-btn>
-                            <v-btn class="forum__post__manage--btn" color="black" title="supprimer le post" @click="deletePost(post.id)" icon>
-                                <v-icon>mdi-delete</v-icon>
+                            <v-btn class="forum__post__manage--btn" color="blue-grey" title="supprimer le post" @click="deletePost(post.id)" icon>
+                                <v-icon>mdi-trash-can-outline</v-icon>
                             </v-btn>
                         </v-card-actions>
                     </div>
@@ -38,14 +38,14 @@
                     </v-card-text>
 
                     <v-card-text class="py-0">
-                        <v-btn icon fab title="J'aime" class="ma-3" color="green" @click="likePost(post.id, post.likes)">
-                            <v-icon>mdi-thumb-up</v-icon>
+                        <v-btn icon fab title="J'aime" class="ma-3" color="red" @click="likePost(post.id, post.likes)">
+                            <v-icon class="pa-3">mdi-heart-multiple-outline</v-icon>
                             {{ post.likes }}
                         </v-btn>
 
-                        <v-btn text @click="afficheCom(post.id)" title="Voir les commentaires">
-                            <v-icon>mdi-comment-eye</v-icon>
-                            Voir les commentaires
+                        <v-btn text @click="afficheCom(post.id)" color="blue-grey" title="Vos commentaires">
+                            <v-icon class="pa-3">mdi-comment-text-multiple-outline</v-icon>
+                            Vos commentaires
                         </v-btn>
                     </v-card-text>
 
@@ -87,7 +87,7 @@
                                     <v-card-text>
                                         <v-form ref="form" v-model="valid">
                                             <v-textarea
-                                                v-model="dataCom.content"
+                                                v-model="dataCom.comContent"
                                                 color="black"
                                                 :rules="comContentRules"
                                                 :counter="255"
@@ -110,7 +110,7 @@
                                 <v-textarea
                                     background-color="#ECECEC"
                                     color="black"
-                                    v-model="dataCom.content"
+                                    v-model="dataCom.comContent"
                                     :rules="comContentRules"
                                     :counter="255"
                                     label="Commentaire"
@@ -153,13 +153,13 @@ export default {
             dataPost: {
                 id: "",
                 title: "",
-                content: "",
+                rs: "",
                 userId: "",
             },
             dataPostS: "",
             dataCom: {
                 id: "",
-                content: "",
+                comContent: "",
                 userId: "",
             },
             dataComS: "",
@@ -178,7 +178,7 @@ export default {
             this.postId = pId;
             this.afficheFrmCm = false;
             axios
-                .get("http://localhost:5000/api/posts/" + pId + "/comments", { headers: { Authorization: "Bearer " + localStorage.token } })
+                .get("http://localhost:5000/api/post/" + pId + "/comments", { headers: { Authorization: "Bearer " + localStorage.token } })
                 .then((response) => {
                     let com = JSON.parse(response.data);
                     this.allComments = com;
@@ -191,13 +191,13 @@ export default {
             this.dataCom.userId = this.userId;
             this.dataComS = JSON.stringify(this.dataCom);
             axios
-                .post("http://localhost:3000/api/posts/" + pId + "/comments", this.dataComS, {
+                .post("http://localhost:5000/api/post/" + pId + "/comment", this.dataComS, {
                     headers: { "Content-Type": "application/json", Authorization: "Bearer " + localStorage.token },
                 })
                 .then((response) => {
                     let rep = JSON.parse(response.data);
                     console.log(rep.message);
-                    this.dataCom.content = "";
+                    this.dataCom.comContent = "";
                     this.dataCom.userId = "";
                     this.afficheFrmCm = false;
                 })
@@ -209,7 +209,7 @@ export default {
         },
         deletePost(pId) {
             axios
-                .delete("http://localhost:3000/api/posts/" + pId, { headers: { Authorization: "Bearer " + localStorage.token } })
+                .delete("http://localhost:5000/api/post/" + pId, { headers: { Authorization: "Bearer " + localStorage.token } })
                 .then((response) => {
                     let rep = JSON.parse(response.data);
                     console.log(rep.message);
@@ -221,7 +221,7 @@ export default {
         },
         deleteCom(cId) {
             axios
-                .delete("http://localhost:3000/api/posts/comments/" + cId, { headers: { Authorization: "Bearer " + localStorage.token } })
+                .delete("http://localhost:5000/api/post/deleteComment/" + cId, { headers: { Authorization: "Bearer " + localStorage.token } })
                 .then((response) => {
                     let rep = JSON.parse(response.data);
                     console.log(rep.message);
@@ -241,7 +241,7 @@ export default {
             this.dataPost.userId = localStorage.userId;
             this.dataPostS = JSON.stringify(this.dataPost);
             axios
-                .put("http://localhost:3000/api/posts/" + this.dataPost.id, this.dataPostS, {
+                .put("http://localhost:5000/api/post/" + this.dataPost.id, this.dataPostS, {
                     headers: { "Content-Type": "application/json", Authorization: "Bearer " + localStorage.token },
                 })
                 .then((response) => {
@@ -260,20 +260,20 @@ export default {
         },
         goDialogUpCom(comContent, comId) {
             this.dataCom.id = comId;
-            this.dataCom.content = comContent;
+            this.dataCom.comContent = comContent;
             this.dialogUpCom = true;
         },
         updateCom() {
             this.dataCom.userId = localStorage.userId;
             this.dataComS = JSON.stringify(this.dataComS);
             axios
-                .put("http://localhost:3000/api/posts/comments/" + this.dataCom.id, this.dataComS, {
+                .put("http://localhost:5000/api/posts/updateComment/" + this.dataCom.id, this.dataComS, {
                     headers: { "Content-Type": "application/json", Authorization: "Bearer " + localStorage.token },
                 })
                 .then((response) => {
                     let rep = JSON.parse(response.data);
                     console.log(rep.message);
-                    this.dataCom.content = "";
+                    this.dataCom.comContent = "";
                     this.dataCom.userId = "";
                     this.afficheFrmCm = false;
                     this.dialogUpCom = false;
@@ -304,7 +304,7 @@ export default {
             this.dataLike.postId = postId;
             this.dataLikeS = JSON.stringify(this.dataLike);
             axios
-                .post("http://localhost:5000/api/posts/" + postId + "/like", this.dataLikeS, {
+                .post("http://localhost:5000/api/post/" + postId + "/like", this.dataLikeS, {
                     headers: { "Content-Type": "application/json", Authorization: "Bearer " + localStorage.token },
                 })
                 .then((response) => {
@@ -325,7 +325,7 @@ export default {
     mounted() {
         this.userId = localStorage.userId;
         axios
-            .get("http://localhost:5000/api/posts", { headers: { Authorization: "Bearer " + localStorage.token } })
+            .get("http://localhost:5000/api/post", { headers: { Authorization: "Bearer " + localStorage.token } })
             .then((response) => {
                 let posts = JSON.parse(response.data);
                 this.allPosts = posts;
@@ -334,7 +334,7 @@ export default {
                 console.log(error);
             });
         axios
-            .get("http://localhost:5000/api/posts/likes", { headers: { Authorization: "Bearer " + localStorage.token } })
+            .get("http://localhost:5000/api/post/likes", { headers: { Authorization: "Bearer " + localStorage.token } })
             .then((response) => {
                 let likes = JSON.parse(response.data);
                 this.allLikes = likes;
@@ -346,6 +346,63 @@ export default {
 };
 </script>
 <style lang="scss">
+#forum {
+    background-image: linear-gradient(
+            112.5deg,
+            rgb(214, 214, 214) 0%,
+            rgb(214, 214, 214) 10%,
+            rgb(195, 195, 195) 10%,
+            rgb(195, 195, 195) 53%,
+            rgb(176, 176, 176) 53%,
+            rgb(176, 176, 176) 55%,
+            rgb(157, 157, 157) 55%,
+            rgb(157, 157, 157) 60%,
+            rgb(137, 137, 137) 60%,
+            rgb(137, 137, 137) 88%,
+            rgb(118, 118, 118) 88%,
+            rgb(118, 118, 118) 91%,
+            rgb(99, 99, 99) 91%,
+            rgb(99, 99, 99) 100%
+        ),
+        linear-gradient(
+            157.5deg,
+            rgb(214, 214, 214) 0%,
+            rgb(214, 214, 214) 10%,
+            rgb(195, 195, 195) 10%,
+            rgb(195, 195, 195) 53%,
+            rgb(176, 176, 176) 53%,
+            rgb(176, 176, 176) 55%,
+            rgb(157, 157, 157) 55%,
+            rgb(157, 157, 157) 60%,
+            rgb(137, 137, 137) 60%,
+            rgb(137, 137, 137) 88%,
+            rgb(118, 118, 118) 88%,
+            rgb(118, 118, 118) 91%,
+            rgb(99, 99, 99) 91%,
+            rgb(99, 99, 99) 100%
+        ),
+        linear-gradient(
+            135deg,
+            rgb(214, 214, 214) 0%,
+            rgb(214, 214, 214) 10%,
+            rgb(195, 195, 195) 10%,
+            rgb(195, 195, 195) 53%,
+            rgb(176, 176, 176) 53%,
+            rgb(176, 176, 176) 55%,
+            rgb(157, 157, 157) 55%,
+            rgb(157, 157, 157) 60%,
+            rgb(137, 137, 137) 60%,
+            rgb(137, 137, 137) 88%,
+            rgb(118, 118, 118) 88%,
+            rgb(118, 118, 118) 91%,
+            rgb(99, 99, 99) 91%,
+            rgb(99, 99, 99) 100%
+        ),
+        linear-gradient(90deg, rgb(195, 195, 195), rgb(228, 228, 228));
+    background-blend-mode: overlay, overlay, overlay, normal;
+    display: flex;
+    flex-direction: row;
+}
 h1 {
     text-align: center;
 }

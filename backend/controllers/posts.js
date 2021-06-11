@@ -82,18 +82,26 @@ exports.deletePost = (req, res, next) => {
 
 //********************************************   LIKE   ******************************************************************* */
 
+//middleware pour recupérer tous les likes
+
+exports.getLikes = (req, res, next) => {
+    posts.getLikes().then((response) => {
+        res.status(200).json(JSON.stringify(response));
+    });
+};
+
 //middleware pour ajouter un like
 
-exports.createLike = (req, res, next) => {
+exports.postLike = (req, res, next) => {
     let userId = req.body.userId;
-    let likes = req.body.likes;
+    let nblikes = req.body.nblikes;
     let postId = req.body.postId;
     let sqlWhereToLike = [postId, userId];
-    let sqlAddLike = [likes, postId];
+    let sqlAddLike = [nblikes, postId];
     console.log(sqlWhereToLike);
     console.log(sqlAddLike);
-    posts.createLike(sqlWhereToLike, sqlAddLike, req.body.liked).then((response) => {
-        console.log(createLike);
+    posts.postLike(sqlWhereToLike, sqlAddLike, req.body.liked).then((response) => {
+        console.log(postLike);
         res.status(201).json(JSON.stringify(response));
     });
 };

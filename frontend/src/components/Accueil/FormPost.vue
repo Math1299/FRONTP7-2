@@ -46,7 +46,7 @@ export default {
         sendPost() {
             this.dataPostS = JSON.stringify(this.dataPost);
             axios
-                .post("http://localhost:5000/api/posts/", this.dataPostS, {
+                .post("http://localhost:5000/api/post/", this.dataPostS, {
                     headers: { "Content-Type": "application/json", Authorization: "Bearer " + localStorage.token },
                 })
                 .then((response) => {

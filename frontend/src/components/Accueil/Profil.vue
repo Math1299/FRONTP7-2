@@ -1,7 +1,7 @@
 <template>
-    <div id="profil" class="d-flex justify-center">
+    <v-app div id="profil" class="d-flex justify-center mb-6">
         <top-header />
-        <v-card class="ma-15" raised width="230px" height="65%">
+        <v-card class="my-auto mx-auto" raised width="250px" height="60%">
             <v-img class="logo" src="../../assets/icon-grey.png" width="150px" contain></v-img>
             <v-card-title class=" justify-center">
                 <h1>Mon profil</h1>
@@ -13,9 +13,9 @@
                 <p>Email : {{ dataGet.email }}</p>
             </v-card-text>
 
-            <v-card-actions class="d-flex justify-space-between mb-15">
-                <v-btn @click.stop="dialogUp = true" title="modifier mes informations" outlined color="indigo">Modifier</v-btn>
-                <v-btn @click.stop="dialogDel = true" title="supprimer mon profil" color="error">Supprimer</v-btn>
+            <v-card-actions class="d-flex justify-space-between">
+                <v-btn @click.stop="dialogUp = true" title="modifier mes informations" outlined color="blue-grey">Modifier</v-btn>
+                <v-btn @click.stop="dialogDel = true" title="supprimer mon profil" outlined color="error">Supprimer</v-btn>
             </v-card-actions>
         </v-card>
 
@@ -70,7 +70,7 @@
                 </v-card-actions>
             </v-card>
         </v-dialog>
-    </div>
+    </v-app>
 </template>
 
 <script>
@@ -215,13 +215,12 @@ export default {
         ),
         linear-gradient(90deg, rgb(195, 195, 195), rgb(228, 228, 228));
     background-blend-mode: overlay, overlay, overlay, normal;
-    display: flex;
-    flex-direction: row;
 }
 .logo {
     top: 0;
-    left: 15%;
+    left: 20%;
 }
+
 @media screen and (min-width: 200px) and (max-width: 640px) {
     #profil {
         padding-left: 10%;

@@ -76,7 +76,18 @@ class Posts {
     }
     //*************************************     LIKES     ***************************************************************************
 
-    createLike(sqlWhereToLike, sqlAddLike, liked) {
+    getLikes() {
+        let sqlGetLikes = "SELECT * FROM likes";
+        return new Promise((resolve) => {
+            connectDb.query(sqlGetLikes, function (err, result, fields) {
+                if (err) throw err;
+                resolve(result);
+                console.log(result);
+            });
+        });
+    }
+
+    postLike(sqlWhereToLike, sqlAddLike, liked) {
         let sqlInsertLikes = "INSERT INTO likes VALUES (NULL, ?, ?)";
         sqlInsertLikes = mysql.format(sqlInsertLikes, sqlWhereToLike);
         console.log(sqlInsertLikes);
